@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Metronome</string>
+
+    <string name="github" translatable="false">Github</string>
+    <string name="theme">Theme</string>
+    <string name="light_n">Light\n</string>
+    <string name="dark_n">Dark\n</string>
+    <string name="system_default">System default</string>
+    <string name="color">Color</string>
+    <string name="theme_color">Theme Color</string>
+    <string name="theme_color_summary">Change the app color.</string>
+    <string name="about_metronome">About Metronome</string>
+
+</resources>
