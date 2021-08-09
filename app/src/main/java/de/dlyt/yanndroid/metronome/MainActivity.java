@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.dlyt.yanndroid.metronome.settings.SettingsActivity;
 import de.dlyt.yanndroid.metronome.utils.InputFilterMinMax;
 import de.dlyt.yanndroid.oneui.SeekBar;
 import de.dlyt.yanndroid.oneui.ThemeColor;
@@ -86,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
         tempo_text = findViewById(R.id.tempo_text);
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0); //soundPool = new SoundPool.Builder().build();
-        sharedPreferences = getSharedPreferences("metronome", Activity.MODE_PRIVATE);
+        soundPool = new SoundPool.Builder().build();
+        sharedPreferences = getSharedPreferences("settings", Activity.MODE_PRIVATE);
 
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_1_first, 1));
-        sounds.add(soundPool.load(getBaseContext(), R.raw.mode_1_others, 1));
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_2_first, 1));
+        sounds.add(soundPool.load(getBaseContext(), R.raw.mode_1_others, 1));
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_2_others, 1));
 
         initConfigCard();
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopTimer(View view) {
-        timer.cancel();
+        if (timer != null) timer.cancel();
         counterValue = 0;
         counter.setText(String.valueOf(counterValue));
 
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pauseTimer(View view) {
-        timer.cancel();
+        if (timer != null) timer.cancel();
 
         play_button.setVisibility(View.VISIBLE);
         pause_button.setVisibility(View.GONE);
@@ -144,20 +144,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void timerTask() {
-        runOnUiThread(() -> {
-            counterValue++;
-            if (counterValue >= beat_counter + 1) {
-                counterValue = 1;
-                if (sound) soundPool.play(sound1, 1, 1, 0, 0, 1);
-                if (vib)
-                    vibrator.vibrate(VibrationEffect.createOneShot(vib1, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                if (sound) soundPool.play(soundN, 1, 1, 0, 0, 1);
-                if (vib)
-                    vibrator.vibrate(VibrationEffect.createOneShot(vibN, VibrationEffect.DEFAULT_AMPLITUDE));
-            }
-            counter.setText(String.valueOf(counterValue));
-        });
+        counterValue++;
+        if (counterValue >= beat_counter + 1) {
+            counterValue = 1;
+            if (sound) soundPool.play(sound1, 1, 1, 0, 0, 1);
+            if (vib)
+                vibrator.vibrate(VibrationEffect.createOneShot(vib1, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            if (sound) soundPool.play(soundN, 1, 1, 0, 0, 1);
+            if (vib)
+                vibrator.vibrate(VibrationEffect.createOneShot(vibN, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+        runOnUiThread(() -> counter.setText(String.valueOf(counterValue)));
     }
 
     private long getPeriod() {
@@ -247,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
         sound = sharedPreferences.getBoolean("sound_switch", true);
         sound1 = sounds.get(sharedPreferences.getInt("sound_choice", 0));
-        soundN = sounds.get(sharedPreferences.getInt("sound_choice", 0) + 1);
+        soundN = sounds.get(sharedPreferences.getInt("sound_choice", 0) + 2);
 
         beat_counter_picker.setValue(beat_counter);
         beat_denominator_picker.setValue(beat_denominator);
@@ -282,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
+                pauseTimer(null);
                 startActivity(new Intent().setClass(getApplicationContext(), SettingsActivity.class));
                 break;
         }

@@ -1,7 +1,6 @@
-package de.dlyt.yanndroid.metronome;
+package de.dlyt.yanndroid.metronome.settings;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +12,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -30,6 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import de.dlyt.yanndroid.metronome.AboutActivity;
+import de.dlyt.yanndroid.metronome.MainActivity;
+import de.dlyt.yanndroid.metronome.R;
 import de.dlyt.yanndroid.oneui.ColorPickerDialog;
 import de.dlyt.yanndroid.oneui.ThemeColor;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
@@ -41,8 +42,12 @@ public class SettingsActivity extends AppCompatActivity {
     private View dark_mode_card;
     private RadioButton dark_mode_card_radio;
     private SwitchMaterial theme_mode_system_switch;
-
     private View colorCircle;
+    private View vibration_card;
+    private View sound_card;
+    private SwitchMaterial vibration_switch;
+    private SwitchMaterial sound_switch;
+
     private SharedPreferences spColorTheme;
 
     private SharedPreferences sharedPreferences;
@@ -70,6 +75,10 @@ public class SettingsActivity extends AppCompatActivity {
         dark_mode_card = findViewById(R.id.dark_mode_card);
         dark_mode_card_radio = findViewById(R.id.dark_mode_card_radio);
         theme_mode_system_switch = findViewById(R.id.theme_mode_system_switch);
+        vibration_card = findViewById(R.id.vibration_card);
+        sound_card = findViewById(R.id.sound_card);
+        vibration_switch = findViewById(R.id.vibration_switch);
+        sound_switch = findViewById(R.id.sound_switch);
 
         colorCircle = findViewById(R.id.colorCircle);
         spColorTheme = getSharedPreferences("ThemeColor", Context.MODE_PRIVATE);
@@ -104,6 +113,20 @@ public class SettingsActivity extends AppCompatActivity {
             setLayoutToTheme(true);
         });
 
+        vibration_card.setOnClickListener(v -> {
+            Intent intent = new Intent().setClass(context, SubSettings.class);
+            intent.putExtra("setting", "vibration");
+            startActivity(intent);
+        });
+        vibration_switch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean("vib_switch", isChecked).apply());
+
+        sound_card.setOnClickListener(v -> {
+            Intent intent = new Intent().setClass(context, SubSettings.class);
+            intent.putExtra("setting", "sound");
+            startActivity(intent);
+        });
+        sound_switch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean("sound_switch", isChecked).apply());
+
         checkForUpdate();
 
     }
@@ -111,6 +134,10 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        sound_switch.setChecked(sharedPreferences.getBoolean("sound_switch", true));
+        vibration_switch.setChecked(sharedPreferences.getBoolean("vib_switch", false));
+
         boolean sysIsDark = ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
         setLayoutToTheme(sysIsDark);
     }

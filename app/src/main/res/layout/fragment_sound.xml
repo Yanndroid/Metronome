@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.SoundFragment">
+
+    <LinearLayout
+        android:id="@+id/sound_expand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|left"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="24dp">
+
+        <Spinner
+            android:id="@+id/sound_mode_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:dividerHorizontal" />
+
+
+        <ImageView
+            android:id="@+id/test_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_samsung_volume"
+            app:tint="?colorPrimary" />
+
+    </LinearLayout>
+
+</FrameLayout>

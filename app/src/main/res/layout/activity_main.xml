@@ -8,7 +8,7 @@
     app:expandable="false"
     app:title="@string/app_name">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -16,22 +16,28 @@
             android:id="@+id/counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="0"
-            android:textSize="75dp" />
+            android:textSize="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/config_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"
             android:animateLayoutChanges="true"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/config_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/pause_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginHorizontal="4dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:onClick="pauseTimer"
@@ -40,30 +46,35 @@
 
             <ImageView
                 android:id="@+id/play_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginHorizontal="4dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:onClick="resumeTimer"
-                android:src="@drawable/ic_samsung_play" />
+                android:src="@drawable/ic_samsung_play"
+                app:tint="?colorPrimary" />
 
             <ImageView
                 android:id="@+id/stop_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginHorizontal="4dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:onClick="stopTimer"
                 android:src="@drawable/ic_samsung_stop"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:tint="@color/red" />
 
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/config_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text="Beat"
+                        android:text="@string/beat"
                         android:textSize="18sp" />
 
                     <NumberPicker
@@ -124,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Tempo"
+                        android:text="@string/tempo"
                         android:textSize="18sp" />
 
                     <EditText
@@ -155,7 +166,7 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </de.dlyt.yanndroid.oneui.layout.ToolbarLayout>

@@ -10,5 +10,15 @@
     <string name="theme_color">Theme Color</string>
     <string name="theme_color_summary">Change the app color.</string>
     <string name="about_metronome">About Metronome</string>
+    <string name="beat">Beat</string>
+    <string name="tempo">Tempo</string>
+    <string name="effects">Effects</string>
+    <string name="vibration">Vibration</string>
+    <string name="vibration_summary">Vibrate device on beat.</string>
+    <string name="sound">Sound</string>
+    <string name="sound_summary">Play a sound on beat.</string>
+    <string name="first_beat">First beat</string>
+    <string name="other_beats">Other beats</string>
+    <string name="sound_mode">Sound Mode</string>
 
 </resources>

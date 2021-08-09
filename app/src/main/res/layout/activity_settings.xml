@@ -172,7 +172,7 @@
             <com.google.android.material.textview.MaterialTextView
                 style="@style/SubHeaderStyle"
                 android:layout_marginTop="15dp"
-                android:text="Effects" />
+                android:text="@string/effects" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -205,14 +205,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:letterSpacing="0"
-                                android:text="Vibration"
+                                android:text="@string/vibration"
                                 android:textSize="18sp" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 style="?android:attr/textAppearanceSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="vibration summary"
+                                android:text="@string/vibration_summary"
                                 android:textAlignment="viewStart" />
 
                         </LinearLayout>
@@ -262,14 +262,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:letterSpacing="0"
-                                android:text="Sound"
+                                android:text="@string/sound"
                                 android:textSize="18sp" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 style="?android:attr/textAppearanceSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="sound summary"
+                                android:text="@string/sound_summary"
                                 android:textAlignment="viewStart" />
 
                         </LinearLayout>
