@@ -21,7 +21,8 @@
             android:theme="@style/SamsungAboutTheme" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SamsungSplashTheme">

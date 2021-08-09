@@ -6,4 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".SubSettings">
 
+    <!--<LinearLayout
+                        android:id="@+id/vib_expand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center|left"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="24dp"
+                            android:gravity="center|left"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="?android:attr/textAppearanceSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="First_beat" />
+
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="?android:attr/textAppearanceSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Other_beats" />
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center|left"
+                            android:orientation="vertical">
+
+
+                            <androidx.appcompat.widget.AppCompatSeekBar
+                                android:id="@+id/first_beat_bar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginVertical="2dp" />
+
+                            <androidx.appcompat.widget.AppCompatSeekBar
+                                android:id="@+id/other_beat_bar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginVertical="2dp" />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>-->
+
+
+    <!--<LinearLayout
+                        android:id="@+id/sound_expand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center|left"
+                        android:orientation="horizontal">
+
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/sound_mode_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sound_1" />
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/sound_mode_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sound_2" />
+
+
+                        </RadioGroup>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="15dp"
+                            android:background="#4D808080" />
+
+
+                        <ImageView
+                            android:id="@+id/test_sound"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_samsung_volume"
+                            app:tint="@color/blue" />
+
+                    </LinearLayout>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
