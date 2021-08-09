@@ -28,7 +28,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    style="?android:attr/textAppearanceSmall"
+                    style="?textAppearanceBody2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/first_beat" />
@@ -78,7 +78,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
-                    style="?android:attr/textAppearanceSmall"
+                    style="?textAppearanceBody2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/other_beats" />

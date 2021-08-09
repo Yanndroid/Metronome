@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:expandable="false"
+    app:navigationIcon="@drawable/ic_samsung_settings"
     app:title="@string/app_name">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -11,18 +12,23 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -76,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
         setSupportActionBar(toolbarLayout.getToolbar());
+        toolbarLayout.setNavigationOnClickListener(v -> {
+            if (play_button.getVisibility() == View.GONE) pauseTimer(null);
+            startActivity(new Intent().setClass(getApplicationContext(), SettingsActivity.class));
+        });
         counter = findViewById(R.id.counter);
         play_button = findViewById(R.id.play_button);
         pause_button = findViewById(R.id.pause_button);
@@ -95,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_2_others, 1));
 
         initConfigCard();
-
+        checkForUpdate();
     }
 
     public void stopTimer(View view) {
@@ -145,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void timerTask() {
         counterValue++;
-        if (counterValue >= beat_counter + 1) {
+        if (counterValue >= beat_counter + 1 || counterValue == 1) {
             counterValue = 1;
             if (sound) soundPool.play(sound1, 1, 1, 0, 0, 1);
             if (vib)
@@ -270,21 +280,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+    private void checkForUpdate() {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Metronome");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        hashMap.put(child.getKey(), child.getValue().toString());
+                    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                if (play_button.getVisibility() == View.GONE) pauseTimer(null);
-                startActivity(new Intent().setClass(getApplicationContext(), SettingsActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+                    toolbarLayout.showNavIconNotification(Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+                } catch (PackageManager.NameNotFoundException e) {
+                    toolbarLayout.showNavIconNotification(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 }
