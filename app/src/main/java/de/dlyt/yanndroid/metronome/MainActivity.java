@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopTimer(View view) {
-        if (timer != null) timer.cancel();
+        timer.cancel();
         counterValue = 0;
         counter.setText(String.valueOf(counterValue));
 
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pauseTimer(View view) {
-        if (timer != null) timer.cancel();
+        timer.cancel();
 
         play_button.setVisibility(View.VISIBLE);
         pause_button.setVisibility(View.GONE);
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                pauseTimer(null);
+                if (play_button.getVisibility() == View.GONE) pauseTimer(null);
                 startActivity(new Intent().setClass(getApplicationContext(), SettingsActivity.class));
                 break;
         }
