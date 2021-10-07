@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SeslSpinner;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -44,8 +44,8 @@ public class SoundFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Context context = getContext();
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Activity.MODE_PRIVATE);
-        Spinner spinner = view.findViewById(R.id.sound_mode_spinner);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("de.dlyt.yanndroid.metronome_preferences", Activity.MODE_PRIVATE);
+        SeslSpinner spinner = view.findViewById(R.id.sound_mode_spinner);
         ImageView test_sound = view.findViewById(R.id.test_sound);
 
 

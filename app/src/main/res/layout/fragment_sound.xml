@@ -16,7 +16,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="24dp">
 
-        <Spinner
+        <androidx.appcompat.widget.SeslSpinner
             android:id="@+id/sound_mode_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_width="1dp"
             android:layout_height="22dp"
             android:layout_marginEnd="15dp"
-            android:background="?android:dividerHorizontal" />
+            android:background="@color/sesl_list_divider_color" />
 
 
         <ImageView

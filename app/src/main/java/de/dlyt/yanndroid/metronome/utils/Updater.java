@@ -14,7 +14,7 @@ import java.io.File;
 
 public class Updater {
 
-    public static void DownloadAndInstall(Context context, String url, String fileName, String title, String description) {
+    public static void downloadAndInstall(Context context, String url, String fileName, String NotiTitle, String NotiDescription) {
         String destination = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + fileName;
 
         Uri fileUri = Uri.parse("file://" + destination);
@@ -26,20 +26,20 @@ public class Updater {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
         request.setMimeType("application/vnd.android.package-archive");
-        request.setTitle(title);
-        request.setDescription(description);
+        request.setTitle(NotiTitle);
+        request.setDescription(NotiDescription);
         request.setDestinationUri(fileUri);
 
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
 
-                Uri apkfileuri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(destination));
+                Uri apkFileUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(destination));
                 Intent install = new Intent(Intent.ACTION_VIEW);
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 install.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
                 install.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                install.setDataAndType(apkfileuri, "application/vnd.android.package-archive");
+                install.setDataAndType(apkFileUri, "application/vnd.android.package-archive");
                 context.startActivity(install);
 
                 context.unregisterReceiver(this);

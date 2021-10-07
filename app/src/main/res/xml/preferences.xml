@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.dlyt.yanndroid.oneui.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/theme" />
+
+    <HorizontalRadioPreference
+        android:key="dark_mode"
+        app:entries="@array/preferences_darkmode_entries"
+        app:entriesImage="@array/preferences_darkmode_entries_image"
+        app:entryValues="@array/preferences_darkmode_values"
+        app:viewType="image" />
+    <SwitchPreference
+        android:key="dark_mode_auto"
+        android:title="@string/system_default" />
+
+    <ColorPickerPreference
+        android:key="color"
+        android:summary="@string/theme_color_summary"
+        android:title="@string/theme_color"
+        app:pickerType="classic" />
+
+
+    <PreferenceCategory android:title="@string/effects" />
+
+    <SwitchPreferenceScreen
+        android:key="vibration"
+        android:summary="@string/vibration_summary"
+        android:title="@string/vibration">
+        <intent
+            android:targetClass="de.dlyt.yanndroid.metronome.settings.SwitchLayoutSetting"
+            android:targetPackage="de.dlyt.yanndroid.metronome">
+            <extra
+                android:name="key"
+                android:value="vibration" />
+        </intent>
+    </SwitchPreferenceScreen>
+
+    <SwitchPreferenceScreen
+        android:key="sound"
+        android:summary="@string/sound_summary"
+        android:title="@string/sound">
+        <intent
+            android:targetClass="de.dlyt.yanndroid.metronome.settings.SwitchLayoutSetting"
+            android:targetPackage="de.dlyt.yanndroid.metronome">
+            <extra
+                android:name="key"
+                android:value="sound" />
+        </intent>
+    </SwitchPreferenceScreen>
+
+
+    <PreferenceCategory />
+
+    <PreferenceScreen
+        android:key="about_app"
+        android:title="@string/about_metronome">
+        <intent
+            android:targetClass="de.dlyt.yanndroid.metronome.AboutActivity"
+            android:targetPackage="de.dlyt.yanndroid.metronome" />
+    </PreferenceScreen>
+
+</de.dlyt.yanndroid.oneui.preference.PreferenceScreen>

@@ -13,25 +13,24 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/SamsungTheme">
-        <activity android:name=".settings.SubSettings"></activity>
+        android:theme="@style/OneUITheme">
         <activity android:name=".settings.SettingsActivity" />
         <activity
             android:name=".AboutActivity"
-            android:theme="@style/SamsungAboutTheme" />
+            android:theme="@style/OneUIAboutTheme" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SamsungSplashTheme">
+            android:theme="@style/OneUISplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".settings.SwitchLayoutSetting" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

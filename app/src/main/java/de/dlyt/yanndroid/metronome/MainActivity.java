@@ -34,9 +34,9 @@ import java.util.TimerTask;
 
 import de.dlyt.yanndroid.metronome.settings.SettingsActivity;
 import de.dlyt.yanndroid.metronome.utils.InputFilterMinMax;
-import de.dlyt.yanndroid.oneui.SeekBar;
-import de.dlyt.yanndroid.oneui.ThemeColor;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
+import de.dlyt.yanndroid.oneui.view.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar tempo_bar;
 
     private boolean seeking = false;
+    private boolean paused = false;
 
     private int counterValue = 0;
     private int beat_counter;
@@ -77,15 +78,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new ThemeColor(this);
+        new ThemeUtil(this);
         setContentView(R.layout.activity_main);
 
         toolbarLayout = findViewById(R.id.toolbar_layout);
-        setSupportActionBar(toolbarLayout.getToolbar());
-        toolbarLayout.setNavigationOnClickListener(v -> {
+        toolbarLayout.setNavigationButtonTooltip(getString(R.string.action_settings));
+        toolbarLayout.setNavigationButtonOnClickListener(v -> {
             if (play_button.getVisibility() == View.GONE) pauseTimer(null);
             startActivity(new Intent().setClass(getApplicationContext(), SettingsActivity.class));
         });
+
         counter = findViewById(R.id.counter);
         play_button = findViewById(R.id.play_button);
         pause_button = findViewById(R.id.pause_button);
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         soundPool = new SoundPool.Builder().build();
-        sharedPreferences = getSharedPreferences("settings", Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("de.dlyt.yanndroid.metronome_preferences", Activity.MODE_PRIVATE);
 
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_1_first, 1));
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_2_first, 1));
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stopTimer(View view) {
+        paused = false;
         timer.cancel();
         counterValue = 0;
         counter.setText(String.valueOf(counterValue));
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pauseTimer(View view) {
+        paused = true;
         timer.cancel();
 
         play_button.setVisibility(View.VISIBLE);
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void resumeTimer(View view) {
+        paused = false;
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -249,11 +254,11 @@ public class MainActivity extends AppCompatActivity {
         beat_denominator = sharedPreferences.getInt("beat_denominator", 4);
         tempo = sharedPreferences.getInt("tempo", 60);
 
-        vib = sharedPreferences.getBoolean("vib_switch", false);
+        vib = sharedPreferences.getBoolean("vibration", false);
         vib1 = sharedPreferences.getInt("vib1", 150);
         vibN = sharedPreferences.getInt("vibN", 75);
 
-        sound = sharedPreferences.getBoolean("sound_switch", true);
+        sound = sharedPreferences.getBoolean("sound", true);
         sound1 = sounds.get(sharedPreferences.getInt("sound_choice", 0));
         soundN = sounds.get(sharedPreferences.getInt("sound_choice", 0) + 2);
 
@@ -267,7 +272,41 @@ public class MainActivity extends AppCompatActivity {
             colorSettingChanged = false;
             recreate();
         }
+
+        if (counterValue != 0){
+            stop_button.setVisibility(View.VISIBLE);
+            counter.setText(String.valueOf(counterValue));
+
+            if (paused){
+                play_button.setVisibility(View.VISIBLE);
+                pause_button.setVisibility(View.GONE);
+            } else {
+                resumeTimer(null);
+            }
+        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) timer.cancel();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("counterValue", counterValue);
+        outState.putBoolean("paused", paused);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        counterValue = (int) savedInstanceState.get("counterValue");
+        paused = (boolean) savedInstanceState.get("paused");
+    }
+
+
 
     @Override
     protected void onPause() {
@@ -281,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void checkForUpdate() {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Metronome");
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_child_name));
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -291,9 +330,9 @@ public class MainActivity extends AppCompatActivity {
                         hashMap.put(child.getKey(), child.getValue().toString());
                     }
 
-                    toolbarLayout.showNavIconNotification(Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+                    toolbarLayout.setNavigationButtonBadge(Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode ? ToolbarLayout.N_BADGE : 0);
                 } catch (PackageManager.NameNotFoundException e) {
-                    toolbarLayout.showNavIconNotification(false);
+                    toolbarLayout.setNavigationButtonBadge(0);
                 }
             }
 

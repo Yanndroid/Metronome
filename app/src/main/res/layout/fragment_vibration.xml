@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/first_beat" />
 
-                <de.dlyt.yanndroid.oneui.SeekBar
+                <de.dlyt.yanndroid.oneui.view.SeekBar
                     android:id="@+id/first_beat_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:layout_width="1dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="15dp"
-                android:background="?android:dividerHorizontal" />
+                android:background="@color/sesl_list_divider_color" />
 
 
             <ImageView
@@ -58,12 +58,6 @@
 
 
         </LinearLayout>
-
-        <!--<View
-            android:layout_marginVertical="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:dividerHorizontal" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/other_beats" />
 
-                <de.dlyt.yanndroid.oneui.SeekBar
+                <de.dlyt.yanndroid.oneui.view.SeekBar
                     android:id="@+id/other_beat_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,7 +90,7 @@
                 android:layout_width="1dp"
                 android:layout_height="22dp"
                 android:layout_marginEnd="15dp"
-                android:background="?android:dividerHorizontal" />
+                android:background="@color/sesl_list_divider_color" />
 
 
             <ImageView

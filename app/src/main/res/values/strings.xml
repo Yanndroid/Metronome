@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Metronome</string>
-
+    <string name="firebase_child_name" translatable="false">Metronome</string>
     <string name="github" translatable="false">Github</string>
+
     <string name="theme">Theme</string>
-    <string name="light_n">Light\n</string>
-    <string name="dark_n">Dark\n</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
     <string name="system_default">System default</string>
     <string name="color">Color</string>
     <string name="theme_color">Theme Color</string>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.dlyt.yanndroid.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical"
+    app:expandable="false"
+    app:navigationIcon="@drawable/ic_samsung_settings"
+    app:title="@string/app_name">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="80dp"
+                app:layout_constraintBottom_toTopOf="@+id/buttons"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/counter">
+
+                <ImageView
+                    android:id="@+id/pause_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="pauseTimer"
+                    android:src="@drawable/ic_samsung_pause"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/play_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="resumeTimer"
+                    android:src="@drawable/ic_samsung_play"
+                    app:tint="?colorPrimary" />
+
+                <ImageView
+                    android:id="@+id/stop_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="stopTimer"
+                    android:src="@drawable/ic_samsung_stop"
+                    android:visibility="gone"
+                    app:tint="@color/red" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/config_card"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="15dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="?textAppearanceBody1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/beat"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <NumberPicker
+                            android:id="@+id/beat_counter_picker"
+                            android:layout_width="30dp"
+                            android:layout_height="50dp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            style="?android:attr/textAppearanceSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/" />
+
+
+                        <NumberPicker
+                            android:id="@+id/beat_denominator_picker"
+                            android:layout_width="30dp"
+                            android:layout_height="50dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@color/sesl_list_divider_color" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="?textAppearanceBody1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/tempo"
+                        android:textSize="18sp" />
+
+                    <de.dlyt.yanndroid.oneui.view.SeekBar
+                        android:id="@+id/tempo_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        app:seslSeekBarMode="expand_vertical" />
+
+                    <EditText
+                        android:gravity="center"
+                        android:id="@+id/tempo_text"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:hint="60"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</de.dlyt.yanndroid.oneui.layout.ToolbarLayout>

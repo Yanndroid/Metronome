@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.dlyt.yanndroid.oneui.layout.SwitchBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/switchbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <de.dlyt.yanndroid.oneui.view.RoundNestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/sesl_appbar_scrolling_view_behavior"
+        app:roundedCorners="top_left|top_right">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/summary_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="28dp"
+                android:lineSpacingExtra="4.0sp"
+                android:textAppearance="?android:textAppearanceListItem"
+                android:textColor="@color/sesl_dialog_body_text_color"
+                android:textSize="15.0sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </de.dlyt.yanndroid.oneui.view.RoundNestedScrollView>
+
+</de.dlyt.yanndroid.oneui.layout.SwitchBarLayout>

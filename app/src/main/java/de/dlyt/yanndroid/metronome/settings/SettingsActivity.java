@@ -1,207 +1,176 @@
 package de.dlyt.yanndroid.metronome.settings;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.util.SeslMisc;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.dlyt.yanndroid.metronome.AboutActivity;
 import de.dlyt.yanndroid.metronome.MainActivity;
 import de.dlyt.yanndroid.metronome.R;
-import de.dlyt.yanndroid.oneui.ColorPickerDialog;
-import de.dlyt.yanndroid.oneui.ThemeColor;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
+import de.dlyt.yanndroid.oneui.preference.ColorPickerPreference;
+import de.dlyt.yanndroid.oneui.preference.HorizontalRadioPreference;
+import de.dlyt.yanndroid.oneui.preference.Preference;
+import de.dlyt.yanndroid.oneui.preference.PreferenceFragment;
+import de.dlyt.yanndroid.oneui.preference.SwitchPreference;
+import de.dlyt.yanndroid.oneui.preference.SwitchPreferenceScreen;
+import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    private View light_mode_card;
-    private RadioButton light_mode_card_radio;
-    private View dark_mode_card;
-    private RadioButton dark_mode_card_radio;
-    private SwitchMaterial theme_mode_system_switch;
-    private View colorCircle;
-    private View vibration_card;
-    private View sound_card;
-    private SwitchMaterial vibration_switch;
-    private SwitchMaterial sound_switch;
-
-    private SharedPreferences spColorTheme;
-
-    private SharedPreferences sharedPreferences;
-    private DatabaseReference mDatabase;
-    private View about_new;
-
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new ThemeColor(this);
+        new ThemeUtil(this);
         setContentView(R.layout.activity_settings);
-        context = this;
-
-        sharedPreferences = getSharedPreferences("settings", Activity.MODE_PRIVATE);
 
         ToolbarLayout toolbarLayout = findViewById(R.id.toolbar_layout);
-        toolbarLayout.setNavigationOnClickListener(v -> onBackPressed());
+        toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up));
+        toolbarLayout.setNavigationButtonOnClickListener(v -> onBackPressed());
 
-        about_new = findViewById(R.id.about_new);
-
-        light_mode_card = findViewById(R.id.light_mode_card);
-        light_mode_card_radio = findViewById(R.id.light_mode_card_radio);
-        dark_mode_card = findViewById(R.id.dark_mode_card);
-        dark_mode_card_radio = findViewById(R.id.dark_mode_card_radio);
-        theme_mode_system_switch = findViewById(R.id.theme_mode_system_switch);
-        vibration_card = findViewById(R.id.vibration_card);
-        sound_card = findViewById(R.id.sound_card);
-        vibration_switch = findViewById(R.id.vibration_switch);
-        sound_switch = findViewById(R.id.sound_switch);
-
-        colorCircle = findViewById(R.id.colorCircle);
-        spColorTheme = getSharedPreferences("ThemeColor", Context.MODE_PRIVATE);
-        GradientDrawable circleDrawable = (GradientDrawable) ((RippleDrawable) colorCircle.getBackground()).getDrawable(0);
-        circleDrawable.setColor(ColorStateList.valueOf(Color.parseColor("#" + spColorTheme.getString("color", "5a00b4"))));
-
-        setLayoutToTheme(sharedPreferences.getBoolean("darkMode", false));
-        theme_mode_system_switch.setChecked(sharedPreferences.getBoolean("themeSystemSwitch", true));
-        theme_mode_system_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean("themeSystemSwitch", isChecked).apply();
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            } else {
-                boolean sysIsDark = ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
-                AppCompatDelegate.setDefaultNightMode(sysIsDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-                sharedPreferences.edit().putBoolean("darkMode", sysIsDark).apply();
-            }
-        });
-
-        light_mode_card.setOnClickListener(v -> {
-            theme_mode_system_switch.setChecked(false);
-            sharedPreferences.edit().putBoolean("themeSystemSwitch", false).apply();
-            sharedPreferences.edit().putBoolean("darkMode", false).apply();
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            setLayoutToTheme(false);
-        });
-        dark_mode_card.setOnClickListener(v -> {
-            theme_mode_system_switch.setChecked(false);
-            sharedPreferences.edit().putBoolean("themeSystemSwitch", false).apply();
-            sharedPreferences.edit().putBoolean("darkMode", true).apply();
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            setLayoutToTheme(true);
-        });
-
-        vibration_card.setOnClickListener(v -> {
-            Intent intent = new Intent().setClass(context, SubSettings.class);
-            intent.putExtra("setting", "vibration");
-            startActivity(intent);
-        });
-        vibration_switch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean("vib_switch", isChecked).apply());
-
-        sound_card.setOnClickListener(v -> {
-            Intent intent = new Intent().setClass(context, SubSettings.class);
-            intent.putExtra("setting", "sound");
-            startActivity(intent);
-        });
-        sound_switch.setOnCheckedChangeListener((buttonView, isChecked) -> sharedPreferences.edit().putBoolean("sound_switch", isChecked).apply());
-
-        checkForUpdate();
-
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
-        sound_switch.setChecked(sharedPreferences.getBoolean("sound_switch", true));
-        vibration_switch.setChecked(sharedPreferences.getBoolean("vib_switch", false));
+        private Context mContext;
+        private SettingsActivity mActivity;
 
-        boolean sysIsDark = ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES);
-        setLayoutToTheme(sysIsDark);
-    }
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            mContext = getContext();
+            if (getActivity() instanceof SettingsActivity)
+                mActivity = ((SettingsActivity) getActivity());
+        }
 
-    private void setLayoutToTheme(boolean night) {
-        dark_mode_card_radio.setChecked(night);
-        dark_mode_card_radio.setTypeface(night ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
-        light_mode_card_radio.setChecked(!night);
-        light_mode_card_radio.setTypeface(!night ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
-    }
+        @Override
+        public void onCreatePreferences(Bundle bundle, String str) {
+            addPreferencesFromResource(R.xml.preferences);
+        }
 
-    public void colorPickerDialog(View view) {
-        ColorPickerDialog mColorPickerDialog;
-        String stringColor = spColorTheme.getString("color", "5a00b4");
-        float[] currentColor = new float[3];
-        Color.colorToHSV(Color.parseColor("#" + stringColor), currentColor);
-        mColorPickerDialog = new ColorPickerDialog(this, 2, currentColor);
-        mColorPickerDialog.setColorPickerChangeListener(new ColorPickerDialog.ColorPickerChangedListener() {
-            @Override
-            public void onColorChanged(int i, float[] fArr) {
-                if (!(fArr[0] == currentColor[0] && fArr[1] == currentColor[1] && fArr[2] == currentColor[2])) {
-                    ThemeColor.setColor(SettingsActivity.this, fArr);
-                    MainActivity.colorSettingChanged = true;
-                }
-            }
+        @SuppressLint("RestrictedApi")
+        @Override
+        public void onCreate(Bundle bundle) {
+            super.onCreate(bundle);
 
-            @Override
-            public void onViewModeChanged(int i) {
+            int darkMode = ThemeUtil.getDarkMode(mContext);
 
-            }
-        });
-        mColorPickerDialog.show();
-    }
+            HorizontalRadioPreference darkModePref = (HorizontalRadioPreference) findPreference("dark_mode");
+            darkModePref.setOnPreferenceChangeListener(this);
+            darkModePref.setDividerEnabled(false);
+            darkModePref.setTouchEffectEnabled(false);
+            darkModePref.setEnabled(darkMode != ThemeUtil.DARK_MODE_AUTO);
+            darkModePref.setValue(SeslMisc.isLightTheme(mContext) ? "0" : "1");
 
-    public void openAboutPage(View view) {
-        startActivity(new Intent().setClass(getApplicationContext(), AboutActivity.class));
-    }
+            SwitchPreference autoDarkModePref = (SwitchPreference) findPreference("dark_mode_auto");
+            autoDarkModePref.setOnPreferenceChangeListener(this);
+            autoDarkModePref.setChecked(darkMode == ThemeUtil.DARK_MODE_AUTO);
 
-    private void checkForUpdate() {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Metronome");
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    HashMap<String, String> hashMap = new HashMap<>();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        hashMap.put(child.getKey(), child.getValue().toString());
+            ColorPickerPreference colorPickerPref = (ColorPickerPreference) findPreference("color");
+            SharedPreferences sharedPreferences = mContext.getSharedPreferences("de.dlyt.yanndroid.metronome_preferences", Context.MODE_PRIVATE);
+            ArrayList<Integer> recent_colors = new Gson().fromJson(sharedPreferences.getString("recent_colors", new Gson().toJson(new int[]{getResources().getColor(R.color.primary_color, mContext.getTheme())})), new TypeToken<ArrayList<Integer>>() {
+            }.getType());
+            for (Integer recent_color : recent_colors) colorPickerPref.onColorChanged(recent_color);
+
+            colorPickerPref.setOnPreferenceChangeListener((var1, var2) -> {
+                Color color = Color.valueOf((Integer) var2);
+
+                recent_colors.add((Integer) var2);
+                sharedPreferences.edit().putString("recent_colors", new Gson().toJson(recent_colors)).apply();
+
+                ThemeUtil.setColor(mActivity, color.red(), color.green(), color.blue());
+                MainActivity.colorSettingChanged = true;
+                return true;
+            });
+
+            checkForUpdate();
+        }
+
+        private void checkForUpdate() {
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_child_name));
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            hashMap.put(child.getKey(), child.getValue().toString());
+                        }
+
+                        if (Integer.parseInt(hashMap.get("versionCode")) > mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode) {
+                            Preference about_app = findPreference("about_app");
+                            about_app.setWidgetLayoutResource(R.layout.sesl_preference_badge);
+                        }
+                    } catch (PackageManager.NameNotFoundException ignored) {
                     }
+                }
 
-                    if (Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode) {
-                        about_new.setVisibility(View.VISIBLE);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            getView().setBackgroundColor(getResources().getColor(R.color.item_background_color, mContext.getTheme()));
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            SharedPreferences sharedPreferences = mContext.getSharedPreferences("de.dlyt.yanndroid.metronome_preferences", Context.MODE_PRIVATE);
+
+            ((SwitchPreferenceScreen) findPreference("vibration")).setChecked(sharedPreferences.getBoolean("vibration", false));
+            ((SwitchPreferenceScreen) findPreference("sound")).setChecked(sharedPreferences.getBoolean("sound", true));
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+            switch (preference.getKey()) {
+                case "dark_mode":
+                    String currentDarkMode = String.valueOf(ThemeUtil.getDarkMode(mContext));
+                    if (currentDarkMode != newValue) {
+                        ThemeUtil.setDarkMode(mActivity, ((String) newValue).equals("0") ? ThemeUtil.DARK_MODE_DISABLED : ThemeUtil.DARK_MODE_ENABLED);
+                    }
+                    return true;
+                case "dark_mode_auto":
+                    HorizontalRadioPreference darkModePref = (HorizontalRadioPreference) findPreference("dark_mode");
+                    if ((boolean) newValue) {
+                        darkModePref.setEnabled(false);
+                        ThemeUtil.setDarkMode(mActivity, ThemeUtil.DARK_MODE_AUTO);
                     } else {
-                        about_new.setVisibility(View.GONE);
+                        darkModePref.setEnabled(true);
                     }
-                } catch (PackageManager.NameNotFoundException e) {
-                    about_new.setVisibility(View.GONE);
-                }
+                    return true;
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            return false;
+        }
 
-            }
-        });
     }
-
 }

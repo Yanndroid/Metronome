@@ -4,6 +4,7 @@
     android:id="@+id/toolbar_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:orientation="vertical"
     app:expandable="false"
     app:navigationIcon="@drawable/ic_samsung_settings"
@@ -19,19 +20,20 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textSize="80dp"
-            app:layout_constraintBottom_toTopOf="@+id/config_card"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:animateLayoutChanges="true"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/config_card"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -68,106 +70,101 @@
 
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/config_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="15dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="?textAppearanceBody1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text="@string/beat"
-                        android:textSize="18sp" />
-
-                    <NumberPicker
-                        android:id="@+id/beat_counter_picker"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp" />
-
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="/" />
-
-
-                    <NumberPicker
-                        android:id="@+id/beat_denominator_picker"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="10dp"
-                    android:background="?android:dividerHorizontal" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="?textAppearanceBody1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/tempo"
-                        android:textSize="18sp" />
-
-                    <EditText
-                        android:id="@+id/tempo_text"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
-                        android:gravity="center"
-                        android:hint="60"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:singleLine="true" />
-
-                    <de.dlyt.yanndroid.oneui.SeekBar
-                        android:id="@+id/tempo_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        app:seslSeekBarMode="expand" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </com.google.android.material.card.MaterialCardView>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/config_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:layout_location="footer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="?textAppearanceBody1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/beat"
+                    android:textSize="18sp" />
+
+                <NumberPicker
+                    android:id="@+id/beat_counter_picker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="?android:attr/textAppearanceSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/" />
+
+
+                <NumberPicker
+                    android:id="@+id/beat_denominator_picker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="@color/sesl_list_divider_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="?textAppearanceBody1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tempo"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/tempo_text"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:gravity="center"
+                    android:hint="60"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:singleLine="true" />
+
+                <de.dlyt.yanndroid.oneui.view.SeekBar
+                    android:id="@+id/tempo_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:seslSeekBarMode="expand" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
 
 </de.dlyt.yanndroid.oneui.layout.ToolbarLayout>

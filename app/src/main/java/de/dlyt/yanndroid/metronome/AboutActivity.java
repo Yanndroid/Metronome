@@ -19,8 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import de.dlyt.yanndroid.metronome.utils.Updater;
-import de.dlyt.yanndroid.oneui.ThemeColor;
 import de.dlyt.yanndroid.oneui.layout.AboutPage;
+import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -29,13 +29,13 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new ThemeColor(this);
+        new ThemeUtil(this);
         setContentView(R.layout.activity_about);
 
         AboutPage about_page = findViewById(R.id.about_page);
         MaterialButton about_github = findViewById(R.id.about_github);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Metronome");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_child_name));
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -47,14 +47,13 @@ public class AboutActivity extends AppCompatActivity {
 
                     if (Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode) {
                         about_page.setUpdateState(AboutPage.UPDATE_AVAILABLE);
-                        about_page.setUpdateButtonOnClickListener(v -> Updater.DownloadAndInstall(getBaseContext(), hashMap.get("apk"), hashMap.get("name") + "_" + hashMap.get("versionName") + ".apk", hashMap.get("name") + " Update", hashMap.get("versionName")));
+                        about_page.setUpdateButtonOnClickListener(v -> Updater.downloadAndInstall(getBaseContext(), hashMap.get("apk"), hashMap.get("name") + "_" + hashMap.get("versionName") + ".apk", hashMap.get("name") + " Update", hashMap.get("versionName")));
                     } else {
                         about_page.setUpdateState(AboutPage.NO_UPDATE);
                     }
 
                     about_github.setVisibility(View.VISIBLE);
                     about_github.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(hashMap.get("github")))));
-
 
                 } catch (PackageManager.NameNotFoundException e) {
                     about_page.setUpdateState(AboutPage.NO_UPDATE);

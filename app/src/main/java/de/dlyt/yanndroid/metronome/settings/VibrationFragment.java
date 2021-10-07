@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import de.dlyt.yanndroid.metronome.R;
-import de.dlyt.yanndroid.oneui.SeekBar;
+import de.dlyt.yanndroid.oneui.view.SeekBar;
 
 public class VibrationFragment extends Fragment {
 
@@ -45,7 +45,7 @@ public class VibrationFragment extends Fragment {
         ImageView restore_first = view.findViewById(R.id.restore_first);
         ImageView restore_others = view.findViewById(R.id.restore_others);
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("de.dlyt.yanndroid.metronome_preferences", Activity.MODE_PRIVATE);
 
 
         first_beat_bar.setMax(300);
