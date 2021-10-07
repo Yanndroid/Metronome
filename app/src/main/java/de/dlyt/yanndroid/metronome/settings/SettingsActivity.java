@@ -3,28 +3,21 @@ package de.dlyt.yanndroid.metronome.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.util.SeslMisc;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.dlyt.yanndroid.metronome.MainActivity;
 import de.dlyt.yanndroid.metronome.R;
+import de.dlyt.yanndroid.metronome.utils.Updater;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 import de.dlyt.yanndroid.oneui.preference.ColorPickerPreference;
 import de.dlyt.yanndroid.oneui.preference.HorizontalRadioPreference;
@@ -104,30 +97,20 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
-            checkForUpdate();
-        }
-
-        private void checkForUpdate() {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_child_name));
-            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            Updater.checkForUpdate(getContext(), new Updater.UpdateChecker() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try {
-                        HashMap<String, String> hashMap = new HashMap<>();
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            hashMap.put(child.getKey(), child.getValue().toString());
-                        }
-
-                        if (Integer.parseInt(hashMap.get("versionCode")) > mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0).versionCode) {
-                            Preference about_app = findPreference("about_app");
-                            about_app.setWidgetLayoutResource(R.layout.sesl_preference_badge);
-                        }
-                    } catch (PackageManager.NameNotFoundException ignored) {
-                    }
+                public void updateAvailable(boolean available, String url, String versionName) {
+                    Preference about_app = findPreference("about_app");
+                    about_app.setWidgetLayoutResource(available ? R.layout.sesl_preference_badge : 0);
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                public void githubAvailable(String url) {
+
+                }
+
+                @Override
+                public void noConnection() {
 
                 }
             });

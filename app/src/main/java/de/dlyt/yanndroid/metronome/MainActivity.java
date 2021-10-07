@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -21,19 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textview.MaterialTextView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import de.dlyt.yanndroid.metronome.settings.SettingsActivity;
 import de.dlyt.yanndroid.metronome.utils.InputFilterMinMax;
+import de.dlyt.yanndroid.metronome.utils.Updater;
 import de.dlyt.yanndroid.oneui.layout.ToolbarLayout;
 import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
 import de.dlyt.yanndroid.oneui.view.SeekBar;
@@ -107,7 +101,23 @@ public class MainActivity extends AppCompatActivity {
         sounds.add(soundPool.load(getBaseContext(), R.raw.mode_2_others, 1));
 
         initConfigCard();
-        checkForUpdate();
+
+        Updater.checkForUpdate(this, new Updater.UpdateChecker() {
+            @Override
+            public void updateAvailable(boolean available, String url, String versionName) {
+                toolbarLayout.setNavigationButtonBadge(available ? ToolbarLayout.N_BADGE : 0);
+            }
+
+            @Override
+            public void githubAvailable(String url) {
+
+            }
+
+            @Override
+            public void noConnection() {
+
+            }
+        });
     }
 
     public void stopTimer(View view) {
@@ -273,11 +283,11 @@ public class MainActivity extends AppCompatActivity {
             recreate();
         }
 
-        if (counterValue != 0){
+        if (counterValue != 0) {
             stop_button.setVisibility(View.VISIBLE);
             counter.setText(String.valueOf(counterValue));
 
-            if (paused){
+            if (paused) {
                 play_button.setVisibility(View.VISIBLE);
                 pause_button.setVisibility(View.GONE);
             } else {
@@ -307,7 +317,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -316,31 +325,6 @@ public class MainActivity extends AppCompatActivity {
                 .putInt("beat_denominator", beat_denominator)
                 .putInt("tempo", tempo)
                 .apply();
-    }
-
-
-    private void checkForUpdate() {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(getString(R.string.firebase_child_name));
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    HashMap<String, String> hashMap = new HashMap<>();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        hashMap.put(child.getKey(), child.getValue().toString());
-                    }
-
-                    toolbarLayout.setNavigationButtonBadge(Integer.parseInt(hashMap.get("versionCode")) > getPackageManager().getPackageInfo(getPackageName(), 0).versionCode ? ToolbarLayout.N_BADGE : 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    toolbarLayout.setNavigationButtonBadge(0);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
 }

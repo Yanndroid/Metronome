@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">Metronome</string>
-    <string name="firebase_child_name" translatable="false">Metronome</string>
     <string name="github" translatable="false">Github</string>
+
+    <string name="firebase_childName" translatable="false">Metronome</string>
+    <string name="firebase_versionCode" translatable="false">versionCode</string>
+    <string name="firebase_github" translatable="false">github</string>
+    <string name="firebase_versionName" translatable="false">versionName</string>
+    <string name="firebase_apk" translatable="false">apk</string>
 
     <string name="theme">Theme</string>
     <string name="light">Light</string>
