@@ -8,15 +8,12 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.database.DatabaseReference;
 
 import de.dlyt.yanndroid.metronome.utils.Updater;
 import de.dlyt.yanndroid.oneui.layout.AboutPage;
 import de.dlyt.yanndroid.oneui.utils.ThemeUtil;
 
 public class AboutActivity extends AppCompatActivity {
-
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
